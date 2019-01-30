@@ -10,7 +10,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 
 args = sys.argv
 
-CONFIG_FILE = "./config/config.yml" if len(args) < 1 else args[1]
+CONFIG_FILE = "./config/config.yml" if len(args) < 2 else args[1]
 
 client = discord.Client()
 
