@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "lydie-230218",
+  "private_key_id": "deba3b8f7ef0b5df7544b18281db9fbcd9a3751a",
+  "private_key": "dummy",
+  "client_email": "lydie-421@lydie-230218.iam.gserviceaccount.com",
+  "client_id": "111041930257254640355",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/lydie-421%40lydie-230218.iam.gserviceaccount.com"
+}
