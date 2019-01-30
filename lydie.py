@@ -39,6 +39,7 @@ def get_google_credentials():
     google_json = json.load(google_conf)
     if google_json["private_key"] == 'dummy':
       google_json["private_key"] = os.environ["GOOGLE_PRIVATE_KEY"]
+      print('private_key is ok.')
     return ServiceAccountCredentials.from_json_keyfile_dict(google_json, ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive'])
 
 def get_game_events():
