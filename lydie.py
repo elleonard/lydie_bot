@@ -2,14 +2,17 @@ import discord
 import yaml
 import json
 import os
+import sys
 
 import gspread
 
 from oauth2client.service_account import ServiceAccountCredentials
 
-client = discord.Client()
+args = sys.argv
 
-event_file = 'event.txt'
+CONFIG_FILE = "./config/config.yml" if len(args) == 0 else args[1]
+
+client = discord.Client()
 
 @client.event
 async def on_ready():
@@ -19,14 +22,14 @@ async def on_ready():
 async def on_message(message):
   if client.user.id in message.content:
     if 'イベントいつまで？' in message.content:
-      await client.send_message(message.channel, get_game_events_text(message, client))
+      await client.send_message(message.channel, get_game_events_text(message))
     if '何やってんだよ団長' in message.content:
       await client.send_message(message.channel, "止まるんじゃねえぞ ってスーちゃんが言ってたけどなんのこと？")
     if 'FGOイベント効率' in message.content:
       await client.send_message(message.channel, "konさんに聞いたほうが早いと思うよ https://twitter.com/niconikon01")
 
 def load_config():
-  with open("./config/config.yml", "r") as conf:
+  with open(CONFIG_FILE, "r") as conf:
     settings = yaml.load(conf)
     return settings
 
@@ -44,7 +47,7 @@ def get_game_events():
   sheet = gsc.open('ソシャゲイベント一覧').sheet1
   return sheet.get_all_records(False, 1)
 
-def get_game_events_text(message, client):
+def get_game_events_text(message):
   event_list = get_game_events()
   text = ""
   for event_data in event_list:
