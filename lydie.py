@@ -57,11 +57,11 @@ def timedelta_text(delta):
     str: 表示用テキスト
   """
   if delta.days > 0:
-    return "あと"+str(delta.days)+"日"
+    return "あと**"+str(delta.days)+"日**"
   if delta.seconds > 3600:
-    return "あと"+str(int(delta.seconds/3600))+"時間"
+    return "あと**"+str(int(delta.seconds/3600))+"時間**"
   if delta.seconds > 60:
-    return "あと"+str(int(delta.seconds/60))+"分"
+    return "あと**"+str(int(delta.seconds/60))+"分**"
   return "終了済み"
 
 def get_game_events_text():
