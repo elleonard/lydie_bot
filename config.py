@@ -15,6 +15,7 @@ try:
     settings = yaml.load(secret_conf)
     os.environ["DISCORD_ACCESS_TOKEN"] = settings["token"]
     os.environ["MASTER_MAIL_ADDRESS"] = settings["mail"]
+    os.environ["SPREADSHEET_EVENT"] = settings["spreadsheet"]["event"]
 except FileNotFoundError:
   print('secret_conf.ymlがないよ')
 

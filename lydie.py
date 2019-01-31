@@ -26,6 +26,8 @@ async def on_message(message):
       await client.send_message(message.channel, "止まるんじゃねえぞ ってスーちゃんが言ってたけどなんのこと？")
     if commands.FGO_EVENT.text in message.content:
       await client.send_message(message.channel, "konさんに聞いたほうが早いと思うよ https://twitter.com/niconikon01")
+    if commands.SPREADSHEET.text in message.content:
+      await client.send_message(message.channel, "ここだよ\n"+get_spreadsheet_urls())
     if commands.HELP.text in message.content:
       await client.send_message(message.channel, get_help_text())
 
@@ -78,5 +80,8 @@ def get_help_text():
   for command in commands.list:
     help_text += command.text+": "+command.help+"\n"
   return help_text
+
+def get_spreadsheet_urls():
+  return "イベントいつまで: " + os.environ["SPREADSHEET_EVENT"]
 
 client.run(os.environ["DISCORD_ACCESS_TOKEN"])
