@@ -4,6 +4,7 @@ import json
 import os
 import sys
 import re
+import random
 from datetime import datetime
 
 import gspread
@@ -28,8 +29,18 @@ async def on_message(message):
       await client.send_message(message.channel, "konさんに聞いたほうが早いと思うよ https://twitter.com/niconikon01")
     if commands.SPREADSHEET.text in message.content:
       await client.send_message(message.channel, "ここだよ\n"+get_spreadsheet_urls())
+    if commands.BARREL.text in message.content:
+      await client.send_message(message.channel, get_barrel())
     if commands.HELP.text in message.content:
       await client.send_message(message.channel, get_help_text())
+
+def get_barrel():
+  rand = random.randint(0,2)
+  if rand == 0:
+    return 'たるですよ'
+  if rand == 1:
+    return 'たるだけに最近たるんで……な、なんでもない！'
+  return 'たーる'
 
 def get_game_events():
   credentials = config.get_google_credentials()
