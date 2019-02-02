@@ -58,6 +58,8 @@ def get_monster(text):
   for monster in monster_list:
     if is_target_monster(monster, monster_types, areas):
       target_monsters.append(monster)
+  if len(target_monsters) == 0:
+    return "条件に合う子がいないみたい"
   monster = random.choice(target_monsters)
   return monster['モンスター名']+" にしよう"
 
