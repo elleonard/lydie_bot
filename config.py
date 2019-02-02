@@ -16,6 +16,7 @@ try:
     os.environ["DISCORD_ACCESS_TOKEN"] = settings["token"]
     os.environ["MASTER_MAIL_ADDRESS"] = settings["mail"]
     os.environ["SPREADSHEET_EVENT"] = settings["spreadsheet"]["event"]
+    os.environ["SPREADSHEET_MONSTER_HUNTER"] = settings["spreadsheet"]["monster_hunter"]
 except FileNotFoundError:
   print('secret_conf.ymlがないよ')
 
