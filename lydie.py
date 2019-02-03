@@ -27,6 +27,8 @@ async def on_message(message):
       await client.send_message(message.channel, get_game_events_text())
     if commands.ORUGA_ITSUKA.text in message.content:
       await client.send_message(message.channel, "止まるんじゃねえぞ ってスーちゃんが言ってたけどなんのこと？")
+    if commands.ASROC_YONEKURA.text in message.content:
+      await client.send_message(message.channel, "https://www.nicovideo.jp/watch/sm14950071")
     if commands.FGO_EVENT.text in message.content:
       await client.send_message(message.channel, "konさんに聞いたほうが早いと思うよ https://twitter.com/niconikon01")
     if commands.SPREADSHEET.text in message.content:
