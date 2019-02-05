@@ -5,6 +5,7 @@ import os
 import sys
 import re
 import random
+import pytz
 from datetime import datetime, timedelta, timezone
 from distutils.util import strtobool
 
@@ -17,6 +18,7 @@ import monster_hunter
 client = discord.Client()
 
 JST = timezone(timedelta(hours=+9), 'JST')
+jptz = pytz.timezone('Asia/Tokyo')
 
 @client.event
 async def on_ready():
@@ -56,13 +58,16 @@ def get_game_events():
   sheet = gsc.open('ソシャゲイベント一覧').sheet1
   return sheet.get_all_records(False, 1)
 
+def to_jst_aware(native):
+  return jptz.localize(native)
+
 def time_left(to):
   now = datetime.now(JST)
   if re.match(r"\d{4}-\d{2}-\d{2} \d{1,2}:\d{2}", to):
-    to_datetime = datetime.strptime(to, '%Y-%m-%d %H:%M')
+    to_datetime = to_jst_aware(datetime.strptime(to, '%Y-%m-%d %H:%M'))
     return to_datetime - now
   if re.match(r"\d{4}-\d{2}-\d{2}", to):
-    to_datetime = datetime.strptime(to, '%Y-%m-%d')
+    to_datetime = to_jst_aware(datetime.strptime(to, '%Y-%m-%d'))
     return to_datetime - now
   return None
 
