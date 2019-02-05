@@ -5,7 +5,7 @@ import os
 import sys
 import re
 import random
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from distutils.util import strtobool
 
 import gspread
@@ -15,6 +15,8 @@ import commands
 import monster_hunter
 
 client = discord.Client()
+
+JST = timezone(timedelta(hours=+9), 'JST')
 
 @client.event
 async def on_ready():
@@ -36,40 +38,9 @@ async def on_message(message):
     if commands.BARREL.text in message.content:
       await client.send_message(message.channel, get_barrel())
     if commands.MONSTER_HUNTER.text in message.content:
-      await client.send_message(message.channel, get_monster(message.content))
+      await client.send_message(message.channel, monster_hunter.get_monster(message.content))
     if commands.HELP.text in message.content:
       await client.send_message(message.channel, get_help_text())
-
-def get_monster(text):
-  monster_list = get_monster_list()
-  # 対象となる種族
-  monster_types = []
-  for monster_type in monster_hunter.MONSTER_TYPES:
-    if monster_type in text:
-      monster_types.append(monster_type)
-  if len(monster_types) == 0:
-    monster_types = monster_hunter.MONSTER_TYPES
-  # 対象となるエリア
-  areas = []
-  for area in monster_hunter.MONSTER_HUNTER_AREAS:
-    if area in text:
-      areas.append(area)
-  if len(areas) == 0:
-    areas = monster_hunter.MONSTER_HUNTER_AREAS
-  target_monsters = []
-  for monster in monster_list:
-    if is_target_monster(monster, monster_types, areas):
-      target_monsters.append(monster)
-  if len(target_monsters) == 0:
-    return "条件に合う子がいないみたい"
-  monster = random.choice(target_monsters)
-  return monster['モンスター名']+" にしよう"
-
-def is_target_monster(monster, types, areas):
-  is_target = False
-  for area in areas:
-    is_target |= strtobool(monster[area])
-  return is_target & (monster['種族'] in types)
 
 def get_barrel():
   rand = random.randint(0,2)
@@ -79,12 +50,6 @@ def get_barrel():
     return 'たるだけに最近たるんで……な、なんでもない！'
   return 'たーる'
 
-def get_monster_list():
-  credentials = config.get_google_credentials()
-  gsc = gspread.authorize(credentials)
-  sheet = gsc.open('MHW 大型モンスター一覧').sheet1
-  return sheet.get_all_records(False, 1)
-
 def get_game_events():
   credentials = config.get_google_credentials()
   gsc = gspread.authorize(credentials)
@@ -92,7 +57,7 @@ def get_game_events():
   return sheet.get_all_records(False, 1)
 
 def time_left(to):
-  now = datetime.now()
+  now = datetime.now(JST)
   if re.match(r"\d{4}-\d{2}-\d{2} \d{1,2}:\d{2}", to):
     to_datetime = datetime.strptime(to, '%Y-%m-%d %H:%M')
     return to_datetime - now
