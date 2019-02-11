@@ -63,10 +63,10 @@ def to_jst_aware(native):
 
 def time_left(to):
   now = datetime.now(JST)
-  if re.match(r"\d{4}-\d{2}-\d{2} \d{1,2}:\d{2}", to):
+  if re.match(r"\d{4}-\d{1,2}-\d{2} \d{1,2}:\d{2}", to):
     to_datetime = to_jst_aware(datetime.strptime(to, '%Y-%m-%d %H:%M'))
     return to_datetime - now
-  if re.match(r"\d{4}-\d{2}-\d{2}", to):
+  if re.match(r"\d{4}-\d{1,2}-\d{2}", to):
     to_datetime = to_jst_aware(datetime.strptime(to, '%Y-%m-%d'))
     return to_datetime - now
   return None
