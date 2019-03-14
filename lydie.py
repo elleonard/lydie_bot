@@ -3,10 +3,7 @@ import yaml
 import json
 import os
 import sys
-import re
 import random
-import pytz
-from datetime import datetime, timedelta, timezone
 from distutils.util import strtobool
 
 import gspread
@@ -14,11 +11,10 @@ import gspread
 import config
 import commands
 import monster_hunter
+import game_event
 
 client = discord.Client()
 
-JST = timezone(timedelta(hours=+9), 'JST')
-jptz = pytz.timezone('Asia/Tokyo')
 
 @client.event
 async def on_ready():
@@ -28,7 +24,7 @@ async def on_ready():
 async def on_message(message):
   if client.user.id in message.content:
     if commands.EVENT_SCHEDULE.text in message.content:
-      await client.send_message(message.channel, get_game_events_text())
+      await client.send_message(message.channel, game_event.get_game_events_text())
     if commands.ORUGA_ITSUKA.text in message.content:
       await client.send_message(message.channel, "止まるんじゃねえぞ ってスーちゃんが言ってたけどなんのこと？")
     if commands.ASROC_YONEKURA.text in message.content:
@@ -51,54 +47,6 @@ def get_barrel():
   if rand == 1:
     return 'たるだけに最近たるんで……な、なんでもない！'
   return 'たーる'
-
-def get_game_events():
-  credentials = config.get_google_credentials()
-  gsc = gspread.authorize(credentials)
-  sheet = gsc.open('ソシャゲイベント一覧').sheet1
-  return sheet.get_all_records(False, 1)
-
-def to_jst_aware(native):
-  return jptz.localize(native)
-
-def time_left(to):
-  now = datetime.now(JST)
-  if re.match(r"\d{4}-\d{1,2}-\d{2} \d{1,2}:\d{2}", to):
-    to_datetime = to_jst_aware(datetime.strptime(to, '%Y-%m-%d %H:%M'))
-    return to_datetime - now
-  if re.match(r"\d{4}-\d{1,2}-\d{2}", to):
-    to_datetime = to_jst_aware(datetime.strptime(to, '%Y-%m-%d'))
-    return to_datetime - now
-  return None
-
-def timedelta_text(delta):
-  """timedeltaから表示用のテキストを生成します
-  
-  Args:
-    delta (timedelta): 生成に用いるtimedelta
-  
-  Returns:
-    str: 表示用テキスト
-  """
-  if delta.days > 0:
-    return "あと**"+str(delta.days)+"日**"
-  if delta.days == 0:
-    if delta.seconds > 3600:
-      return "あと**"+str(int(delta.seconds/3600))+"時間**"
-    if delta.seconds > 60:
-      return "あと**"+str(int(delta.seconds/60))+"分**"
-  return "終了済み"
-
-def get_game_events_text():
-  event_list = get_game_events()
-  text = ""
-  for event_data in event_list:
-    text += event_data['ソシャゲ名'] + " の " + event_data['イベント名'] + " は " + event_data['イベント終了'] + " まで"
-    delta = time_left(event_data['イベント終了'])
-    if delta is not None:
-      text += "（" + timedelta_text(delta) + "）"
-    text += "\n"
-  return text + "だよ"
 
 def get_help_text():
   help_text = "コマンド一覧\n"
