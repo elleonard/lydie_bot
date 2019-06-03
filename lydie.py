@@ -22,23 +22,23 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-  if client.user.id in message.content:
+  if client.user in message.mentions:
     if commands.EVENT_SCHEDULE.text in message.content:
-      await client.send_message(message.channel, game_event.get_game_events_text())
+      await message.channel.send(game_event.get_game_events_text())
     if commands.ORUGA_ITSUKA.text in message.content:
-      await client.send_message(message.channel, "止まるんじゃねえぞ ってスーちゃんが言ってたけどなんのこと？")
+      await message.channel.send("止まるんじゃねえぞ ってスーちゃんが言ってたけどなんのこと？")
     if commands.ASROC_YONEKURA.text in message.content:
-      await client.send_message(message.channel, "https://www.nicovideo.jp/watch/sm14950071")
+      await message.channel.send("https://www.nicovideo.jp/watch/sm14950071")
     if commands.FGO_EVENT.text in message.content:
-      await client.send_message(message.channel, "konさんに聞いたほうが早いと思うよ https://twitter.com/niconikon01")
+      await message.channel.send("konさんに聞いたほうが早いと思うよ https://twitter.com/niconikon01")
     if commands.SPREADSHEET.text in message.content:
-      await client.send_message(message.channel, "ここだよ\n"+get_spreadsheet_urls())
+      await message.channel.send("ここだよ\n"+get_spreadsheet_urls())
     if commands.BARREL.text in message.content:
-      await client.send_message(message.channel, get_barrel())
+      await message.channel.send(get_barrel())
     if commands.MONSTER_HUNTER.text in message.content:
-      await client.send_message(message.channel, monster_hunter.get_monster(message.content))
+      await message.channel.send(monster_hunter.get_monster(message.content))
     if commands.HELP.text in message.content:
-      await client.send_message(message.channel, get_help_text())
+      await message.channel.send(get_help_text())
 
 def get_barrel():
   rand = random.randint(0,2)

@@ -26,6 +26,8 @@ def str_to_datetime(strtime):
   Returns:
     datetime型に変換した時刻。時刻のパースに失敗した場合はNone
   """
+  if re.match(r"\d{4}-\d{1,2}-\d{2} \d{1,2}:\d{2}:\d{2}", strtime):
+    return to_jst_aware(datetime.strptime(strtime, '%Y-%m-%d %H:%M:%S'))
   if re.match(r"\d{4}-\d{1,2}-\d{2} \d{1,2}:\d{2}", strtime):
     return to_jst_aware(datetime.strptime(strtime, '%Y-%m-%d %H:%M'))
   if re.match(r"\d{4}-\d{1,2}-\d{2}", strtime):
